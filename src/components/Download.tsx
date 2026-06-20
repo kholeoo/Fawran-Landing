@@ -8,7 +8,7 @@ export default function Download() {
   const t = useTranslations('download');
 
   return (
-    <section id="download" className="py-24 px-4 bg-[#1B6AFF]">
+    <section id="download" className="py-24 px-4 bg-[#1B6AFF] scroll-mt-20">
       <div className="max-w-3xl mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

@@ -2,14 +2,14 @@
 
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
-import { Banknote, Clock, UserPlus } from 'lucide-react';
+import { MapPin, UserPlus, Zap } from 'lucide-react';
 
 export default function ForCouriers() {
-  const t = useTranslations('couriers');
+  const t = useTranslations('clients');
 
   const benefits = [
-    { icon: Banknote, label: t('benefit1') },
-    { icon: Clock, label: t('benefit2') },
+    { icon: Zap, label: t('benefit1') },
+    { icon: MapPin, label: t('benefit2') },
     { icon: UserPlus, label: t('benefit3') },
   ];
 
@@ -50,7 +50,7 @@ export default function ForCouriers() {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <a
-            href="#"
+            href="#download"
             className="inline-flex items-center px-8 py-4 rounded-full bg-white text-[#FF6B1A] font-bold text-lg hover:bg-orange-50 transition-all"
             style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}
           >

@@ -44,12 +44,12 @@
     "vision_title": "Our Vision",
     "vision_body": "To be Egypt's number one delivery partner from north to south."
   },
-  "couriers": {
-    "title": "Join as a Delivery Courier",
-    "benefit1": "Earn Daily",
-    "benefit2": "Choose Your Hours",
-    "benefit3": "Join for Free",
-    "cta": "Register as Courier"
+  "clients": {
+    "title": "Join as a Client",
+    "benefit1": "Order in Seconds",
+    "benefit2": "Real-Time Tracking",
+    "benefit3": "Free to Join",
+    "cta": "Download the App"
   },
   "download": {
     "title": "Ready to Start?",

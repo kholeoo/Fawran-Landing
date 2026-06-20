@@ -2,13 +2,11 @@
 
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
-import { MessageCircle, Share2, ThumbsUp } from 'lucide-react';
-
 export default function Contact() {
   const t = useTranslations('contact');
 
   return (
-    <section id="contact" className="py-24 px-4 bg-[#F8F9FC]">
+    <section id="contact" className="py-24 px-4 bg-[#F8F9FC] scroll-mt-20">
       <div className="max-w-2xl mx-auto">
         <motion.div
           className="text-center mb-12"
@@ -61,31 +59,6 @@ export default function Contact() {
           </button>
         </motion.form>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex justify-center gap-6 mt-8"
-        >
-          {[
-            { Icon: MessageCircle, label: 'WhatsApp', color: '#25D366' },
-            { Icon: Share2, label: 'Instagram', color: '#E1306C' },
-            { Icon: ThumbsUp, label: 'Facebook', color: '#1877F2' },
-          ].map(({ Icon, label, color }) => (
-            <a
-              key={label}
-              href="#"
-              aria-label={label}
-              className="w-11 h-11 rounded-full card flex items-center justify-center text-[#9BA5BF] transition-all hover:scale-110"
-              style={{ ['--hover-color' as string]: color }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = color)}
-              onMouseLeave={(e) => (e.currentTarget.style.color = '')}
-            >
-              <Icon size={20} />
-            </a>
-          ))}
-        </motion.div>
       </div>
     </section>
   );

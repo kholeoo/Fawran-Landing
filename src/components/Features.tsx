@@ -22,7 +22,7 @@ export default function Features() {
   ];
 
   return (
-    <section id="features" className="py-24 px-4 bg-[#F8F9FC] relative overflow-hidden">
+    <section id="features" className="py-24 px-4 bg-[#F8F9FC] relative overflow-hidden scroll-mt-20">
       {/* Particle network background */}
       <div className="absolute inset-0 opacity-40 pointer-events-none">
         <ParticleField />
