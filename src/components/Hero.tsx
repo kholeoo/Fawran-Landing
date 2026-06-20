@@ -27,11 +27,11 @@ export default function Hero() {
         </Suspense>
       </motion.div>
 
-      {/* Blue tint overlay so ThreeScene reads as blue-toned */}
-      <div className="absolute inset-0 z-[1] bg-[#1B6AFF]/70 pointer-events-none" />
+      {/* Subtle dark overlay to keep text readable against the scene */}
+      <div className="absolute inset-0 z-[1] bg-[#1B6AFF]/30 pointer-events-none" />
 
       {/* Bottom fade into next section */}
-      <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-[#1455CC] to-transparent z-[2]" />
+      <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-[#1B6AFF] to-transparent z-[2]" />
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
