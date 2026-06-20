@@ -1,0 +1,72 @@
+{
+  "nav": {
+    "about": "About",
+    "vision": "Vision",
+    "features": "Features",
+    "contact": "Contact",
+    "download": "Download App"
+  },
+  "hero": {
+    "headline": "Faster. Smarter. Reliable.",
+    "subtext": "Fawran — On-demand delivery platform in Suez, Egypt",
+    "cta_primary": "Download the App",
+    "cta_secondary": "Learn More"
+  },
+  "how": {
+    "title": "How Fawran Works",
+    "step1_title": "Create Your Order",
+    "step1_desc": "Enter pickup address, drop-off location, and parcel details",
+    "step2_title": "Courier Accepts",
+    "step2_desc": "A nearby courier accepts your order instantly",
+    "step3_title": "Fast Delivery",
+    "step3_desc": "Track your delivery in real-time until it arrives"
+  },
+  "features": {
+    "title": "Why Fawran?",
+    "f1_title": "Live Tracking",
+    "f1_desc": "See your courier's location in real time",
+    "f2_title": "Group Orders",
+    "f2_desc": "Dispatch dozens of orders to a single courier",
+    "f3_title": "Points Payment",
+    "f3_desc": "Pay with points and earn more with every order",
+    "f4_title": "Rate Your Courier",
+    "f4_desc": "Rate your experience and help us improve",
+    "f5_title": "Instant Notifications",
+    "f5_desc": "Get live updates on every order status change",
+    "f6_title": "Customer Support",
+    "f6_desc": "Our team is ready to help you anytime"
+  },
+  "about": {
+    "title": "Who We Are",
+    "body": "Fawran is a local delivery platform born in Suez to serve individuals and businesses. We believe fast, reliable delivery is a right for everyone.",
+    "mission_title": "Our Mission",
+    "mission_body": "To make delivery fast, reliable, and fairly priced for everyone in Egypt.",
+    "vision_title": "Our Vision",
+    "vision_body": "To be Egypt's number one delivery partner from north to south."
+  },
+  "couriers": {
+    "title": "Join as a Delivery Courier",
+    "benefit1": "Earn Daily",
+    "benefit2": "Choose Your Hours",
+    "benefit3": "Join for Free",
+    "cta": "Register as Courier"
+  },
+  "download": {
+    "title": "Ready to Start?",
+    "subtitle": "Download the app now and get started in seconds",
+    "google_play": "Get it on Google Play",
+    "app_store": "Coming Soon on App Store"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email",
+    "message": "Your Message",
+    "send": "Send"
+  },
+  "footer": {
+    "tagline": "Deliver it fast",
+    "made_in": "Made with ❤️ in Suez, Egypt",
+    "rights": "All rights reserved"
+  }
+}
