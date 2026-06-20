@@ -19,7 +19,7 @@ export default function Hero() {
   const scale = useTransform(scrollY, [0, 500], [1, 0.88]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#F8F9FC]">
+    <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-[#F8F9FC]">
       {/* Three.js background */}
       <motion.div className="absolute inset-0 z-0" style={{ opacity, scale }}>
         <Suspense fallback={<SceneFallback />}>

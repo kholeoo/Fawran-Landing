@@ -29,10 +29,10 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 will-change-transform ${
         scrolled
           ? 'bg-white/90 backdrop-blur-md border-b border-[#E2E6F0] shadow-sm'
-          : 'bg-transparent'
+          : 'bg-white/80 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none'
       }`}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
