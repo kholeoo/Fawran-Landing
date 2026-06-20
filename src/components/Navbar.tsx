@@ -29,11 +29,12 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 will-change-transform ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
         scrolled
-          ? 'bg-white/90 backdrop-blur-md border-b border-[#E2E6F0] shadow-sm'
-          : 'bg-white/80 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none'
+          ? 'bg-white border-b border-[#E2E6F0] shadow-sm'
+          : 'bg-white md:bg-transparent'
       }`}
+      style={{ transform: 'translateZ(0)' }}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         <Link href={`/${locale}`} className="flex items-center">
