@@ -9,65 +9,53 @@ import { ChevronDown } from 'lucide-react';
 const ThreeScene = dynamic(() => import('./ThreeScene'), { ssr: false });
 
 function SceneFallback() {
-  return <div className="absolute inset-0 bg-gradient-to-br from-[#EEF3FF] to-[#F8F9FC]" />;
+  return <div className="w-full h-full bg-gradient-to-br from-[#EEF3FF] to-[#E8F0FF]" />;
 }
 
 export default function Hero() {
   const t = useTranslations('hero');
   const { scrollY } = useScroll();
   const opacity = useTransform(scrollY, [0, 500], [1, 0]);
-  const scale = useTransform(scrollY, [0, 500], [1, 0.88]);
 
   return (
-    <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-[#F8F9FC]">
-      {/* Three.js background */}
-      <motion.div className="absolute inset-0 z-0" style={{ opacity, scale }}>
-        <Suspense fallback={<SceneFallback />}>
-          <ThreeScene />
-        </Suspense>
-      </motion.div>
+    <section className="relative min-h-[100svh] flex flex-col md:flex-row overflow-hidden bg-[#E8F0FF]">
 
-      {/* Soft radial wash so text is readable */}
-      <div className="absolute inset-0 z-[1] bg-gradient-radial from-white/60 via-white/30 to-transparent pointer-events-none" />
-
-      {/* Bottom fade into next section */}
-      <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-[#F8F9FC] to-transparent z-[2]" />
-
-      {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+      {/* ── Left: content (40%) ── */}
+      <div className="relative z-10 flex flex-col justify-center px-8 md:px-12 lg:px-16 py-28 md:py-0 w-full md:w-[40%] shrink-0">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.7 }}
         >
-          <span className="inline-block mb-4 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#EEF3FF] border border-[#D4E2FF] text-[#1B6AFF]">
+          <span className="inline-block mb-5 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#EEF3FF] border border-[#D4E2FF] text-[#1B6AFF]">
             فورًا · Fawran
           </span>
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.1 }}
-          className="text-4xl sm:text-6xl md:text-7xl font-bold text-[#0D1020] leading-tight mb-6"
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#0D1020] leading-tight mb-5"
         >
-          {t('headline')}
+          <span className="text-[#FF6B1A]">{t('headline_accent')}</span>{' '}
+          {t('headline_rest')}
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.25 }}
-          className="text-lg sm:text-xl text-[#4A5270] mb-10 max-w-xl mx-auto"
+          transition={{ duration: 0.7, delay: 0.25 }}
+          className="text-base sm:text-lg text-[#4A5270] mb-8"
         >
           {t('subtext')}
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="flex flex-wrap items-center justify-center gap-4"
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="flex flex-wrap gap-3"
         >
           <a
             href="#download"
@@ -84,9 +72,23 @@ export default function Hero() {
         </motion.div>
       </div>
 
+      {/* ── Right: scene (60%) ── */}
+      <motion.div
+        className="relative w-full md:w-[60%] h-[55vw] md:h-auto min-h-[340px]"
+        style={{ opacity }}
+      >
+        {/* Bottom fade on mobile (into content below) */}
+        <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-[#E8F0FF] to-transparent z-10 md:hidden pointer-events-none" />
+        {/* Left fade blending into content panel on desktop */}
+        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#E8F0FF] to-transparent z-10 pointer-events-none hidden md:block" />
+        <Suspense fallback={<SceneFallback />}>
+          <ThreeScene />
+        </Suspense>
+      </motion.div>
+
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-[#9BA5BF]"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 text-[#9BA5BF]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}

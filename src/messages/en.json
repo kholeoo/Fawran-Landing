@@ -7,8 +7,9 @@
     "download": "Download App"
   },
   "hero": {
-    "headline": "Faster. Smarter. Reliable.",
-    "subtext": "Fawran — On-demand delivery platform in Suez, Egypt",
+    "headline_accent": "Delivery",
+    "headline_rest": "Faster. Smarter. Reliable.",
+    "subtext": "Fawran — Smart on-demand delivery platform",
     "cta_primary": "Download the App",
     "cta_secondary": "Learn More"
   },

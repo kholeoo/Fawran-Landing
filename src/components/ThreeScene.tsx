@@ -2,6 +2,7 @@
 
 import { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
+import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -241,6 +242,109 @@ function Courier({ isOrange, startPhase }: { isOrange: boolean; startPhase: numb
   );
 }
 
+// ─── Floating Activity Badges ────────────────────────────────────────────────
+const BADGE_EVENTS = [
+  { text: 'طلب جديد', icon: '📦', color: '#1B6AFF', bg: '#EEF3FF' },
+  { text: 'تم الاستلام', icon: '📍', color: '#FF6B1A', bg: '#FFF0E8' },
+  { text: 'تم التسليم', icon: '✅', color: '#16A34A', bg: '#F0FDF4' },
+  { text: 'طيار قبل الطلب', icon: '🏍️', color: '#7C3AED', bg: '#F5F3FF' },
+  { text: 'طلب جديد', icon: '📦', color: '#1B6AFF', bg: '#EEF3FF' },
+  { text: 'تم التسليم', icon: '✅', color: '#16A34A', bg: '#F0FDF4' },
+  { text: 'تم الاستلام', icon: '📍', color: '#FF6B1A', bg: '#FFF0E8' },
+  { text: 'طيار قبل الطلب', icon: '🏍️', color: '#7C3AED', bg: '#F5F3FF' },
+  { text: 'طلب جديد', icon: '📦', color: '#1B6AFF', bg: '#EEF3FF' },
+  { text: 'تم التسليم', icon: '✅', color: '#16A34A', bg: '#F0FDF4' },
+];
+
+const BADGE_POSITIONS: [number, number, number][] = [
+  [-5.5, 0.4, -3.5],
+  [4.5, 0.4, -3],
+  [-3, 0.4, -1.5],
+  [5.5, 0.4, 1],
+  [0, 0.4, -4],
+  [-6, 0.4, 2],
+  [3, 0.4, 3],
+  [-2, 0.4, 3.5],
+  [6, 0.4, -1],
+  [-4, 0.4, 0.5],
+];
+
+function FloatingBadge({
+  position, event, offset,
+}: {
+  position: [number, number, number];
+  event: typeof BADGE_EVENTS[0];
+  offset: number;
+}) {
+  const [visible, setVisible] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState(event);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => {
+    let alive = true;
+
+    const cycle = (delay: number) => {
+      timerRef.current = setTimeout(() => {
+        if (!alive) return;
+        const next = BADGE_EVENTS[Math.floor(Math.random() * BADGE_EVENTS.length)];
+        setCurrentEvent(next);
+        setVisible(true);
+        setTimeout(() => { if (alive) setVisible(false); }, 2800);
+        cycle(2800 + 2000 + Math.random() * 2500);
+      }, delay);
+    };
+
+    cycle(offset);
+    return () => { alive = false; clearTimeout(timerRef.current); };
+  }, [offset]);
+
+  return (
+    <Html position={position} center distanceFactor={10} zIndexRange={[10, 20]}>
+      <div
+        dir="rtl"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? 'translateY(0) scale(1)' : 'translateY(6px) scale(0.92)',
+          transition: 'opacity 0.45s ease, transform 0.45s ease',
+          background: currentEvent.bg,
+          color: currentEvent.color,
+          border: `1.5px solid ${currentEvent.color}40`,
+          borderRadius: '999px',
+          padding: '6px 14px',
+          fontSize: '13px',
+          fontFamily: 'Cairo, sans-serif',
+          fontWeight: 700,
+          whiteSpace: 'nowrap',
+          boxShadow: `0 4px 16px ${currentEvent.color}25, 0 1px 4px rgba(0,0,0,0.08)`,
+          pointerEvents: 'none',
+          userSelect: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+        }}
+      >
+        <span style={{ fontSize: '14px', lineHeight: 1 }}>{currentEvent.icon}</span>
+        <span>{currentEvent.text}</span>
+      </div>
+    </Html>
+  );
+}
+
+function FloatingBadges() {
+  return (
+    <>
+      {BADGE_POSITIONS.map((pos, i) => (
+        <FloatingBadge
+          key={i}
+          position={pos}
+          event={BADGE_EVENTS[i % BADGE_EVENTS.length]}
+          offset={i * 600 + 400}
+        />
+      ))}
+    </>
+  );
+}
+
 // ─── Scene Root ───────────────────────────────────────────────────────────────
 function DeliveryScene({ mouse }: { mouse: { x: number; y: number } }) {
   const groupRef = useRef<THREE.Group>(null);
@@ -259,6 +363,7 @@ function DeliveryScene({ mouse }: { mouse: { x: number; y: number } }) {
       {Array.from({ length: COURIER_COUNT }, (_, i) => (
         <Courier key={i} isOrange={i % 5 === 3} startPhase={i / COURIER_COUNT} />
       ))}
+      <FloatingBadges />
     </group>
   );
 }
@@ -279,11 +384,11 @@ export default function ThreeScene() {
 
   return (
     <Canvas
-      camera={{ position: [0, 4, 10], fov: 62 }}
+      camera={{ position: [0, 1.8, 5], fov: 90 }}
       style={{ background: 'transparent' }}
       gl={{ antialias: true, alpha: true }}
     >
-      <fog attach="fog" args={['#F8F9FC', 14, 26]} />
+      <fog attach="fog" args={['#E8F0FF', 10, 20]} />
       <ambientLight intensity={0.5} />
       <DeliveryScene mouse={mouse} />
     </Canvas>
