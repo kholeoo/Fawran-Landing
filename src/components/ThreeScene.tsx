@@ -10,7 +10,7 @@ const ROWS = 9;
 const CELL = 1.05;
 const TRAIL_LEN = 38;
 const COURIER_COUNT = 8;
-const C_PRIMARY = '#1B6AFF';
+const C_PRIMARY = '#ffffff';
 const C_ORANGE = '#FF6B1A';
 const C_WHITE = '#ffffff';
 
@@ -283,7 +283,7 @@ export default function ThreeScene() {
       style={{ background: 'transparent' }}
       gl={{ antialias: true, alpha: true }}
     >
-      <fog attach="fog" args={['#F8F9FC', 14, 26]} />
+      <fog attach="fog" args={['#1B6AFF', 14, 26]} />
       <ambientLight intensity={0.5} />
       <DeliveryScene mouse={mouse} />
     </Canvas>
