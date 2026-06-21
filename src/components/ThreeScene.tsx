@@ -384,7 +384,7 @@ export default function ThreeScene() {
 
   return (
     <Canvas
-      camera={{ position: [0, 2.2, 6], fov: 95 }}
+      camera={{ position: [0, 1.8, 5], fov: 90 }}
       style={{ background: 'transparent' }}
       gl={{ antialias: true, alpha: true }}
     >
