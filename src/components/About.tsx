@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { Target, Eye } from 'lucide-react';
 
-const NetworkScene = dynamic(() => import('./NetworkScene'), { ssr: false });
+const LogoScene = dynamic(() => import('./LogoScene'), { ssr: false });
 
 export default function About() {
   const t = useTranslations('about');
@@ -55,7 +55,7 @@ export default function About() {
             transition={{ duration: 0.7 }}
             className="order-1 lg:order-2 rtl:lg:order-1 h-[360px] rounded-2xl overflow-hidden bg-[#F8F9FC] border border-[#E2E6F0]"
           >
-            <NetworkScene />
+            <LogoScene />
           </motion.div>
         </div>
       </div>
