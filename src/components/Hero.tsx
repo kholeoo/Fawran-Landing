@@ -21,7 +21,7 @@ export default function Hero() {
     <section className="relative min-h-[100svh] flex flex-col md:flex-row overflow-hidden bg-[#E8F0FF]">
 
       {/* ── Left: content (40%) ── */}
-      <div className="relative z-10 flex flex-col justify-center px-8 md:px-12 lg:px-16 py-28 md:py-0 w-full md:w-[40%] shrink-0">
+      <div className="relative z-10 flex flex-col justify-center px-8 md:px-12 lg:px-16 pt-28 pb-0 md:py-0 w-full md:w-[40%] shrink-0">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
