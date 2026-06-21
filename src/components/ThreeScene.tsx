@@ -278,7 +278,7 @@ function FloatingBadge({
 }) {
   const [visible, setVisible] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(event);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
     let alive = true;
