@@ -63,7 +63,18 @@
     "name": "الاسم",
     "email": "البريد الإلكتروني",
     "message": "رسالتك",
-    "send": "إرسال"
+    "send": "إرسال",
+    "sending": "جارٍ الإرسال…",
+    "success_title": "تم الإرسال!",
+    "success_body": "شكرًا! سنتواصل معك قريبًا.",
+    "error_generic": "حدث خطأ ما. يرجى المحاولة مجددًا.",
+    "error_rate_limit": "طلبات كثيرة جدًا — يرجى الانتظار دقيقة والمحاولة مجددًا.",
+    "error_name_required": "الاسم مطلوب.",
+    "error_name_max": "يجب ألا يتجاوز الاسم 100 حرف.",
+    "error_email_required": "البريد الإلكتروني مطلوب.",
+    "error_email_invalid": "يرجى إدخال بريد إلكتروني صحيح.",
+    "error_message_required": "الرسالة مطلوبة.",
+    "error_message_max": "يجب ألا تتجاوز الرسالة 2000 حرف."
   },
   "footer": {
     "tagline": "وصّلها بسرعة",
