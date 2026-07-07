@@ -6,22 +6,26 @@ import { useState } from 'react';
 
 const API_URL = 'https://fawran-backend.onrender.com/api/v1';
 
+const EGYPT_MOBILE_REGEX = /^(?:\+20|0020|0)?1[0125]\d{8}$/;
+
 interface FormState {
   name: string;
   email: string;
+  mobile: string;
   message: string;
 }
 
 interface FieldErrors {
   name?: string;
   email?: string;
+  mobile?: string;
   message?: string;
 }
 
 export default function Contact() {
   const t = useTranslations('contact');
 
-  const [form, setForm] = useState<FormState>({ name: '', email: '', message: '' });
+  const [form, setForm] = useState<FormState>({ name: '', email: '', mobile: '', message: '' });
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -34,6 +38,9 @@ export default function Contact() {
 
     if (!form.email.trim()) e.email = t('error_email_required');
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = t('error_email_invalid');
+
+    if (!form.mobile.trim()) e.mobile = t('error_mobile_required');
+    else if (!EGYPT_MOBILE_REGEX.test(form.mobile.replace(/[\s-]/g, ''))) e.mobile = t('error_mobile_invalid');
 
     if (!form.message.trim()) e.message = t('error_message_required');
     else if (form.message.length > 2000) e.message = t('error_message_max');
@@ -140,6 +147,19 @@ export default function Contact() {
                   placeholder={t('email')}
                 />
                 {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+              </div>
+
+              <div>
+                <label className="block text-[#4A5270] text-sm mb-2 font-medium">{t('mobile')}</label>
+                <input
+                  type="tel"
+                  inputMode="tel"
+                  value={form.mobile}
+                  onChange={handleChange('mobile')}
+                  className={inputClass(errors.mobile)}
+                  placeholder="01xxxxxxxxx"
+                />
+                {errors.mobile && <p className="mt-1 text-xs text-red-500">{errors.mobile}</p>}
               </div>
 
               <div>

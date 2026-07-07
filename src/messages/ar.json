@@ -62,6 +62,7 @@
     "title": "تواصل معنا",
     "name": "الاسم",
     "email": "البريد الإلكتروني",
+    "mobile": "رقم الموبايل",
     "message": "رسالتك",
     "send": "إرسال",
     "sending": "جارٍ الإرسال…",
@@ -73,6 +74,8 @@
     "error_name_max": "يجب ألا يتجاوز الاسم 100 حرف.",
     "error_email_required": "البريد الإلكتروني مطلوب.",
     "error_email_invalid": "يرجى إدخال بريد إلكتروني صحيح.",
+    "error_mobile_required": "رقم الموبايل مطلوب.",
+    "error_mobile_invalid": "يرجى إدخال رقم موبايل مصري صحيح.",
     "error_message_required": "الرسالة مطلوبة.",
     "error_message_max": "يجب ألا تتجاوز الرسالة 2000 حرف."
   },
