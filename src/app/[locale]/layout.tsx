@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import { Cairo, Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
-import { locales, type Locale } from '@/i18n';
+import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
+import { locales, defaultLocale, type Locale } from '@/i18n';
+import { siteUrl, isIndexable } from '@/lib/site';
 import '../globals.css';
 
 const cairo = Cairo({
@@ -20,6 +21,13 @@ const inter = Inter({
   display: 'swap',
 });
 
+const ogLocales: Record<Locale, string> = { ar: 'ar_EG', en: 'en_US' };
+
+const languageAlternates = {
+  ...Object.fromEntries(locales.map((locale) => [locale, `${siteUrl}/${locale}`])),
+  'x-default': `${siteUrl}/${defaultLocale}`,
+};
+
 type Props = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
@@ -27,52 +35,29 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'meta' });
 
-  if (locale === 'ar') {
-    return {
-      title: 'فورًا | توصيل سريع وموثوق في السويس',
-      description: 'فورًا منصة توصيل ذكية تربط العملاء بالمناديب في السويس، مصر.',
-      alternates: {
-        canonical: 'https://fawran.app/ar',
-        languages: { ar: 'https://fawran.app/ar', en: 'https://fawran.app/en' },
-      },
-      openGraph: {
-        title: 'فورًا | توصيل سريع وموثوق في السويس',
-        description: 'فورًا منصة توصيل ذكية تربط العملاء بالمناديب في السويس، مصر.',
-        locale: 'ar_EG',
-        type: 'website',
-        url: 'https://fawran.app/ar',
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: 'فورًا | توصيل سريع وموثوق في السويس',
-        description: 'فورًا منصة توصيل ذكية تربط العملاء بالمناديب في السويس، مصر.',
-      },
-      robots: { index: true, follow: true },
-      icons: { icon: '/favicon.png', apple: '/favicon.png' },
-    };
-  }
+  const title = t('title');
+  const description = t('description');
+  const url = `${siteUrl}/${locale}`;
 
   return {
-    title: 'Fawran | Fast & Reliable Delivery in Suez, Egypt',
-    description: 'Fawran is a smart delivery platform connecting clients with couriers in Suez, Egypt.',
-    alternates: {
-      canonical: 'https://fawran.app/en',
-      languages: { ar: 'https://fawran.app/ar', en: 'https://fawran.app/en' },
-    },
+    metadataBase: new URL(siteUrl),
+    title,
+    description,
+    alternates: { canonical: url, languages: languageAlternates },
     openGraph: {
-      title: 'Fawran | Fast & Reliable Delivery in Suez, Egypt',
-      description: 'Fawran is a smart delivery platform connecting clients with couriers in Suez, Egypt.',
-      locale: 'en_US',
+      title,
+      description,
+      url,
+      siteName: t('site_name'),
+      locale: ogLocales[locale as Locale],
       type: 'website',
-      url: 'https://fawran.app/en',
     },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Fawran | Fast & Reliable Delivery in Suez, Egypt',
-      description: 'Fawran is a smart delivery platform connecting clients with couriers in Suez, Egypt.',
-    },
-    robots: { index: true, follow: true },
+    twitter: { card: 'summary_large_image', title, description },
+    robots: isIndexable
+      ? { index: true, follow: true }
+      : { index: false, follow: false },
     icons: { icon: '/favicon.png', apple: '/favicon.png' },
   };
 }
@@ -81,25 +66,70 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'Organization',
-      name: 'Fawran',
-      url: 'https://fawran.app',
-      description: 'On-demand delivery platform in Suez, Egypt',
-      foundingLocation: { '@type': 'Place', name: 'Suez, Egypt' },
-    },
-    {
-      '@type': 'MobileApplication',
-      name: 'Fawran',
-      operatingSystem: 'Android',
-      applicationCategory: 'DeliveryApplication',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'EGP' },
-    },
-  ],
-};
+async function buildJsonLd(locale: string) {
+  const t = await getTranslations({ locale, namespace: 'meta' });
+
+  const name = t('site_name');
+  const description = t('description');
+  const url = `${siteUrl}/${locale}`;
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${siteUrl}/#organization`,
+        name,
+        url: siteUrl,
+        logo: `${siteUrl}/logo.png`,
+        description,
+      },
+      {
+        // Organization is one entity shared by both locales, so its @id stays
+        // global; the nodes below differ per locale and get locale-scoped ids.
+        '@type': 'WebSite',
+        '@id': `${url}#website`,
+        url,
+        name,
+        inLanguage: locale,
+        publisher: { '@id': `${siteUrl}/#organization` },
+      },
+      {
+        // A courier service has no premises to visit, so it is described as a
+        // service-area business: areaServed rather than a street address.
+        '@type': 'DeliveryService',
+        '@id': `${url}#service`,
+        name,
+        description,
+        url,
+        provider: { '@id': `${siteUrl}/#organization` },
+        areaServed: {
+          '@type': 'City',
+          name: t('city'),
+          containedInPlace: {
+            '@type': 'AdministrativeArea',
+            name: t('region'),
+            containedInPlace: { '@type': 'Country', name: t('country') },
+          },
+          geo: {
+            '@type': 'GeoCoordinates',
+            latitude: 29.9668,
+            longitude: 32.5498,
+          },
+        },
+      },
+      {
+        '@type': 'MobileApplication',
+        '@id': `${url}#app`,
+        name,
+        url,
+        operatingSystem: 'Android',
+        applicationCategory: 'DeliveryApplication',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'EGP' },
+      },
+    ],
+  };
+}
 
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
@@ -108,7 +138,12 @@ export default async function LocaleLayout({ children, params }: Props) {
     notFound();
   }
 
+  // Without this, reading the locale falls back to the incoming request headers,
+  // which opts every page into dynamic rendering despite generateStaticParams.
+  setRequestLocale(locale);
+
   const messages = await getMessages();
+  const jsonLd = await buildJsonLd(locale);
   const isRTL = locale === 'ar';
 
   return (

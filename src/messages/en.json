@@ -1,4 +1,13 @@
 {
+  "meta": {
+    "site_name": "Fawran",
+    "title": "Fawran | Fast & Reliable Delivery in Suez, Egypt",
+    "description": "Fawran is a smart delivery platform connecting clients with couriers in Suez, Egypt.",
+    "og_tagline": "Fast, reliable delivery in Suez",
+    "city": "Suez",
+    "region": "Suez Governorate",
+    "country": "Egypt"
+  },
   "nav": {
     "about": "About",
     "vision": "Vision",
