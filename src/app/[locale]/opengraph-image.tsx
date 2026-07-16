@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { ImageResponse } from 'next/og';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { locales } from '@/i18n';
@@ -5,6 +7,10 @@ import { locales } from '@/i18n';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 export const alt = 'Fawran';
+
+// Intrinsic size of public/wordmark-white.png, used to scale it without distortion.
+const WORDMARK_RATIO = 1491 / 317;
+const WORDMARK_HEIGHT = 116;
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -23,6 +29,11 @@ async function loadGoogleFont(family: string, weight: number, text: string) {
   }
 
   return fetch(src[1]).then((res) => res.arrayBuffer());
+}
+
+async function loadWordmark() {
+  const bytes = await readFile(join(process.cwd(), 'public', 'wordmark-white.png'));
+  return `data:image/png;base64,${bytes.toString('base64')}`;
 }
 
 // satori (bundled in @vercel/og 0.7.2) implements no bidi algorithm and ignores
@@ -45,15 +56,15 @@ export default async function Image({
   const t = await getTranslations({ locale, namespace: 'meta' });
 
   const isRTL = locale === 'ar';
-  const name = t('site_name');
   const tagline = t('og_tagline');
   const location = `${t('city')}${isRTL ? '، ' : ', '}${t('country')}`;
 
   const family = isRTL ? 'Cairo' : 'Inter';
-  const glyphs = `${name}${tagline}${location}`;
-  const [bold, regular] = await Promise.all([
+  const glyphs = `${tagline}${location}`;
+  const [bold, regular, wordmark] = await Promise.all([
     loadGoogleFont(family, 700, glyphs),
     loadGoogleFont(family, 400, glyphs),
+    loadWordmark(),
   ]);
 
   return new ImageResponse(
@@ -73,22 +84,17 @@ export default async function Image({
           fontFamily: family,
         }}
       >
-        <div
-          style={{
-            display: 'flex',
-            fontSize: 104,
-            fontWeight: 700,
-            color: '#FFFFFF',
-            letterSpacing: isRTL ? 0 : '-0.03em',
-          }}
-        >
-          {name}
-        </div>
+        <img
+          src={wordmark}
+          width={Math.round(WORDMARK_HEIGHT * WORDMARK_RATIO)}
+          height={WORDMARK_HEIGHT}
+          alt="Fawran"
+        />
 
         <div
           style={{
             display: 'flex',
-            marginTop: 20,
+            marginTop: 40,
             fontSize: 46,
             fontWeight: 400,
             color: '#B9C2DB',
