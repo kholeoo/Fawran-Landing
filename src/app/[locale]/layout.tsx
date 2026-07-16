@@ -87,7 +87,7 @@ async function buildJsonLd(locale: string) {
         '@id': `${siteUrl}/#organization`,
         name,
         url: siteUrl,
-        logo: `${siteUrl}/logo.png`,
+        logo: `${siteUrl}/wordmark-colored.png`,
         description,
       },
       {
