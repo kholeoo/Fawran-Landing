@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import { locales, defaultLocale, type Locale } from '@/i18n';
 import { siteUrl, isIndexable } from '@/lib/site';
+import Analytics from '@/components/Analytics';
 import '../globals.css';
 
 const cairo = Cairo({
@@ -59,6 +60,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? { index: true, follow: true }
       : { index: false, follow: false },
     icons: { icon: '/favicon.png', apple: '/favicon.png' },
+    // Dormant until the Search Console token is set — emits the verification
+    // meta tag only once GOOGLE_SITE_VERIFICATION is provided (real domain).
+    verification: process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : undefined,
   };
 }
 
@@ -162,6 +168,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
