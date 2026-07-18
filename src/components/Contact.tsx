@@ -1,8 +1,9 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { trackEvent } from '@/lib/gtag';
 
 const API_URL = 'https://fawran-backend.onrender.com/api/v1';
 
@@ -24,12 +25,21 @@ interface FieldErrors {
 
 export default function Contact() {
   const t = useTranslations('contact');
+  const locale = useLocale();
 
   const [form, setForm] = useState<FormState>({ name: '', email: '', mobile: '', message: '' });
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const startedRef = useRef(false);
+
+  // Fire form_start once, when the visitor first interacts with any field.
+  function handleFirstInteraction() {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    trackEvent('form_start', { form: 'contact', locale });
+  }
 
   function validate(): FieldErrors {
     const e: FieldErrors = {};
@@ -53,6 +63,12 @@ export default function Contact() {
     const fieldErrors = validate();
     if (Object.keys(fieldErrors).length > 0) {
       setErrors(fieldErrors);
+      trackEvent('form_submit_error', {
+        form: 'contact',
+        locale,
+        reason: 'validation',
+        fields: Object.keys(fieldErrors).join(','),
+      });
       return;
     }
     setErrors({});
@@ -68,13 +84,22 @@ export default function Contact() {
 
       if (res.status === 201) {
         setSuccess(true);
+        trackEvent('generate_lead', { form: 'contact', locale });
       } else if (res.status === 429) {
         setSubmitError(t('error_rate_limit'));
+        trackEvent('form_submit_error', { form: 'contact', locale, reason: 'rate_limit' });
       } else {
         setSubmitError(t('error_generic'));
+        trackEvent('form_submit_error', {
+          form: 'contact',
+          locale,
+          reason: 'server',
+          status: res.status,
+        });
       }
     } catch {
       setSubmitError(t('error_generic'));
+      trackEvent('form_submit_error', { form: 'contact', locale, reason: 'network' });
     } finally {
       setSubmitting(false);
     }
@@ -124,7 +149,7 @@ export default function Contact() {
               <p className="text-[#4A5270]">{t('success_body')}</p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+            <form onSubmit={handleSubmit} onFocus={handleFirstInteraction} noValidate className="flex flex-col gap-5">
               <div>
                 <label className="block text-[#4A5270] text-sm mb-2 font-medium">{t('name')}</label>
                 <input
