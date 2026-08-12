@@ -18,6 +18,8 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      // Third-party bundles served as-is (see public/vendor/README.md).
+      "public/vendor/**",
     ],
   },
 ];

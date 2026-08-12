@@ -56,3 +56,67 @@ body {
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(13, 16, 32, 0.06);
 }
+
+/* ── Tracking page ──────────────────────────────────────────────────────────
+   The landing hides the native cursor in favour of <CustomCursor />. The
+   receiver tracking page deliberately does not load that component, so it opts
+   the cursor back in for its own subtree. */
+.tracking-page,
+.tracking-page * {
+  cursor: auto;
+}
+
+.tracking-page a,
+.tracking-page button {
+  cursor: pointer;
+}
+
+/* Breathing dot on the "live" badge. Deliberately CSS rather than
+   framer-motion: this page must not pull a 40kB animation runtime over a mobile
+   network to blink one 6px dot. */
+@keyframes fawran-live-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.fawran-live-dot {
+  animation: fawran-live-dot 1.8s ease-in-out infinite;
+}
+
+/* Halo behind the courier marker — the only thing on the page that signals
+   "this is live" through motion, so it stops when the socket is down. */
+@keyframes fawran-courier-pulse {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+.fawran-courier-pulse {
+  animation: fawran-courier-pulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fawran-courier-pulse {
+    animation: none;
+    opacity: 0.35;
+    transform: scale(1.4);
+  }
+
+  .fawran-live-dot {
+    animation: none;
+  }
+}

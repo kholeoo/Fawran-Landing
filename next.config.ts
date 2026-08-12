@@ -7,6 +7,32 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
+
+  async headers() {
+    return [
+      {
+        // Receiver tracking links carry their authorization in the path, which
+        // makes normally-boring headers matter: without this, the token rides
+        // along in the Referer of every outbound request the page makes — map
+        // tiles above all. `X-Robots-Tag` doubles up on the route's own
+        // noindex metadata for anything that reads headers but not markup.
+        source: '/:locale/track/:path*',
+        headers: [
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+        ],
+      },
+      {
+        // Same guarantee before the locale redirect has happened, since the
+        // backend hands out unprefixed /track/{token} links.
+        source: '/track/:path*',
+        headers: [
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+        ],
+      },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);
