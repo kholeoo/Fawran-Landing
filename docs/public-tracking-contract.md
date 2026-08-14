@@ -12,7 +12,7 @@ code later.
 | --- | --- |
 | Initial state | `GET {NEXT_PUBLIC_API_URL}/public/tracking/{token}` — once per mount |
 | Live updates | socket.io namespace `/public-tracking`, `tracking:subscribe` → `tracking:location` / `tracking:status` |
-| Public surface | `status`, `isTrackingActive`, `isFinal`, `location`, `destination` — five keys, nothing else |
+| Public surface | `status`, `isTrackingActive`, `isFinal`, `location`, `destination`, `fees`, `courier` |
 | Statuses | `SEARCHING`, `COURIER_ASSIGNED`, `IN_TRANSIT`, `DELIVERED`, `CANCELLED`, `EXPIRED` |
 
 Both transports are derived from one env var: `NEXT_PUBLIC_API_URL` is the REST
@@ -63,6 +63,12 @@ out of date" warning appears past 5 minutes. A socket that is down is never
 "live", however recent the last fix. All of it keys off the payload's
 `updatedAt`, never off the moment the page received the value — a cold load can
 be up to 10s behind the stream.
+
+**Fees and courier identity (2026-08-14).** The public GET now also carries
+this drop-off's `fees` (رسوم التوصيل) and `courier: { name, mobile } | null`.
+The page shows them under the status block and builds a `tel:` link from the
+mobile. A payload that omits them still renders the map (`fees`/`courier` →
+`null`). Client name/phone stay off the wire.
 
 ## Token containment
 

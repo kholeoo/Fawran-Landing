@@ -16,6 +16,7 @@ import { getFreshness } from '@/lib/tracking/freshness';
 import { trackEvent } from '@/lib/gtag';
 import TrackingHeader from './TrackingHeader';
 import TrackingStatus from './TrackingStatus';
+import TrackingReceiverDetails from './TrackingReceiverDetails';
 import LastUpdated from './LastUpdated';
 import { TrackingError, TrackingInvalid, TrackingLoading } from './TrackingStates';
 import { TrackingMapPlaceholder } from './TrackingMap';
@@ -100,7 +101,7 @@ export default function TrackingExperience({ token }: { token: string }) {
     );
   }
 
-  const { status, isTrackingActive, location, destination } = tracking;
+  const { status, isTrackingActive, location, destination, fees, courier } = tracking;
   const lastUpdatedAt = location?.updatedAt ?? null;
   const freshness = getFreshness(lastUpdatedAt, now, isLive);
   const hasMapContent = !!location || !!destination;
@@ -129,6 +130,7 @@ export default function TrackingExperience({ token }: { token: string }) {
               // actually streaming. SEARCHING has no socket traffic to report.
               showConnection={isTrackingActive}
             />
+            <TrackingReceiverDetails fees={fees} courier={courier} />
           </div>
         </section>
 

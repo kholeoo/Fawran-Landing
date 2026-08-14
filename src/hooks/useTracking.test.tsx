@@ -25,6 +25,8 @@ const IN_TRANSIT: TrackingState = {
   isFinal: false,
   location: { latitude: 29.9668, longitude: 32.5498, updatedAt: '2026-08-12T10:00:00.000Z' },
   destination: { latitude: 29.9812, longitude: 32.5384 },
+  fees: 30,
+  courier: { name: 'أحمد محمد', mobile: '01208741247' },
 };
 
 const DELIVERED: TrackingState = {
@@ -33,6 +35,8 @@ const DELIVERED: TrackingState = {
   isFinal: true,
   location: null,
   destination: { latitude: 29.9812, longitude: 32.5384 },
+  fees: 30,
+  courier: { name: 'أحمد محمد', mobile: '01208741247' },
 };
 
 /** Latest handlers the hook registered with the socket. */
@@ -117,6 +121,8 @@ describe('useTracking — live updates', () => {
         isFinal: false,
         location: null,
         destination: null,
+        fees: 30,
+        courier: null,
       },
     });
 
@@ -144,6 +150,11 @@ describe('useTracking — live updates', () => {
       latitude: 29.9714,
       longitude: 32.5463,
       updatedAt: '2026-08-12T10:00:30.000Z',
+    });
+    expect(result.current.tracking?.fees).toBe(30);
+    expect(result.current.tracking?.courier).toEqual({
+      name: 'أحمد محمد',
+      mobile: '01208741247',
     });
     expect(getTracking).toHaveBeenCalledTimes(1);
   });

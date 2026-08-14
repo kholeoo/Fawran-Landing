@@ -66,6 +66,8 @@ const IN_TRANSIT: TrackingState = {
   isFinal: false,
   location: { latitude: 29.9668, longitude: 32.5498, updatedAt: new Date().toISOString() },
   destination: { latitude: 29.9812, longitude: 32.5384 },
+  fees: 30,
+  courier: { name: 'أحمد محمد', mobile: '01208741247' },
 };
 
 const SEARCHING: TrackingState = {
@@ -74,6 +76,8 @@ const SEARCHING: TrackingState = {
   isFinal: false,
   location: null,
   destination: null,
+  fees: 30,
+  courier: null,
 };
 
 const DELIVERED: TrackingState = {
@@ -82,6 +86,8 @@ const DELIVERED: TrackingState = {
   isFinal: true,
   location: null,
   destination: { latitude: 29.9812, longitude: 32.5384 },
+  fees: 30,
+  courier: { name: 'أحمد محمد', mobile: '01208741247' },
 };
 
 function renderPage(locale: 'ar' | 'en' = 'ar') {
@@ -114,6 +120,13 @@ describe('tracking page — Arabic', () => {
     expect(screen.getByText('تتبع طلبك')).toBeInTheDocument();
     expect(screen.getByText(/آخر تحديث/)).toBeInTheDocument();
     expect(screen.getByTestId('tracking-map')).toBeInTheDocument();
+    expect(screen.getByText('رسوم التوصيل')).toBeInTheDocument();
+    expect(screen.getByText('30 ج.م')).toBeInTheDocument();
+    expect(screen.getByText('أحمد محمد')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'اتصال' })).toHaveAttribute(
+      'href',
+      'tel:+201208741247',
+    );
 
     act(() => handlers().onConnectionChange('connected'));
     expect(screen.getByText('مباشر')).toBeInTheDocument();
@@ -208,6 +221,9 @@ describe('tracking page — map', () => {
     expect(screen.queryByTestId('tracking-map')).not.toBeInTheDocument();
     // Nothing to be live about yet, so no badge claims otherwise.
     expect(screen.queryByText('مباشر')).not.toBeInTheDocument();
+    expect(screen.getByText('رسوم التوصيل')).toBeInTheDocument();
+    expect(screen.getByText('30 ج.م')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'اتصال' })).not.toBeInTheDocument();
   });
 });
 
@@ -361,6 +377,21 @@ describe('tracking page — failure states', () => {
   });
 });
 
+describe('tracking page — receiver details', () => {
+  it('still renders the map when fees and courier are missing from the payload', async () => {
+    getTracking.mockResolvedValue({
+      ok: true,
+      state: { ...IN_TRANSIT, fees: null, courier: null },
+    });
+
+    renderPage('ar');
+
+    expect(await screen.findByTestId('tracking-map')).toBeInTheDocument();
+    expect(screen.queryByText('رسوم التوصيل')).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'اتصال' })).not.toBeInTheDocument();
+  });
+});
+
 describe('tracking page — privacy', () => {
   it('never puts the token or coordinates into analytics', async () => {
     renderPage('ar');
@@ -385,7 +416,6 @@ describe('tracking page — privacy', () => {
     await screen.findByRole('heading', { level: 1 });
 
     const text = document.body.textContent ?? '';
-    expect(text).not.toMatch(/\b01\d{9}\b/);
     expect(text).not.toContain(TOKEN);
     expect(text).not.toContain('29.9668');
   });

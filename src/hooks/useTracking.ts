@@ -124,7 +124,10 @@ function sameState(a: TrackingState, b: TrackingState): boolean {
     a.location?.longitude === b.location?.longitude &&
     a.location?.updatedAt === b.location?.updatedAt &&
     a.destination?.latitude === b.destination?.latitude &&
-    a.destination?.longitude === b.destination?.longitude
+    a.destination?.longitude === b.destination?.longitude &&
+    a.fees === b.fees &&
+    a.courier?.name === b.courier?.name &&
+    a.courier?.mobile === b.courier?.mobile
   );
 }
 

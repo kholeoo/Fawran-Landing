@@ -241,6 +241,8 @@ describe('trackingSocket.subscribe', () => {
       isFinal: true,
       location: null,
       destination: null,
+      fees: null,
+      courier: null,
     });
   });
 });

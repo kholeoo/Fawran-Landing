@@ -2,10 +2,10 @@
  * Public receiver tracking — wire contract.
  *
  * Mirrors `docs/public-delivery-tracking-contract.md` in fawran-backend. The
- * backend owns this shape; nothing here invents a field, and the five keys it
- * publishes are the entire public surface. If the page needs more, the answer
- * is to ask for it to be added to the backend's whitelist, not to widen this
- * file.
+ * backend owns this shape; nothing here invents a field. The public surface is
+ * status, isTrackingActive, isFinal, location, destination, fees, courier.
+ * Client name/phone stay off this payload. Courier identity is on it so a
+ * receiver who is not a Fawran user can recognise and call the rider.
  *
  * Pure and dependency-free so the parsing is testable on its own.
  */
@@ -58,6 +58,11 @@ export type CourierLocation = GeoPoint & {
   updatedAt: string | null;
 };
 
+export type TrackingCourier = {
+  name: string;
+  mobile: string;
+};
+
 export type TrackingState = {
   status: TrackingStatus;
   /** False means there is no live courier position — and `location` is null. */
@@ -67,6 +72,10 @@ export type TrackingState = {
   location: CourierLocation | null;
   /** Null when the client sent no coordinates — render without a pin. */
   destination: GeoPoint | null;
+  /** This drop-off's delivery fee. Null when the payload omitted it. `0` is a real fee. */
+  fees: number | null;
+  /** Assigned rider, or null while SEARCHING / unassigned / missing on the wire. */
+  courier: TrackingCourier | null;
 };
 
 function isFiniteNumber(value: unknown): value is number {
@@ -113,14 +122,36 @@ export function normalizeLocation(raw: unknown): CourierLocation | null {
   return { ...point, updatedAt: asIsoString(asRecord(raw)?.updatedAt) };
 }
 
+function asNonEmptyString(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  return trimmed ? trimmed : null;
+}
+
+/** Drop-off fee. Missing or junk → null. `0` is kept. */
+export function normalizeFees(raw: unknown): number | null {
+  if (typeof raw !== 'number' || !Number.isFinite(raw) || raw < 0) return null;
+  return raw;
+}
+
+export function normalizeCourier(raw: unknown): TrackingCourier | null {
+  const record = asRecord(raw);
+  if (!record) return null;
+  const name = asNonEmptyString(record.name);
+  const mobile = asNonEmptyString(record.mobile);
+  if (!name || !mobile) return null;
+  return { name, mobile };
+}
+
 /**
- * Normalize the five-key public state, used for both the REST body and the
+ * Normalize the public state, used for both the REST body and the
  * `tracking:status` / subscribe-ack payloads — they are the same shape.
  *
  * Returns null when the payload is unusable. A missing or unrecognized status
  * is not a hard failure: an added backend state should not break a page that is
  * otherwise being told the truth, so it resolves by what the payload says about
- * activity (see `fallbackStatus`).
+ * activity (see `fallbackStatus`). Missing `fees` / `courier` become null so an
+ * older payload still renders the map.
  */
 export function normalizeTrackingState(raw: unknown): TrackingState | null {
   const record = asRecord(raw);
@@ -152,6 +183,8 @@ export function normalizeTrackingState(raw: unknown): TrackingState | null {
     isFinal,
     location,
     destination: normalizePoint(body.destination),
+    fees: normalizeFees(body.fees),
+    courier: normalizeCourier(body.courier),
   };
 }
 

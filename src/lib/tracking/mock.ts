@@ -39,6 +39,8 @@ export function getMockTrackingState(): TrackingState {
     isFinal: false,
     location: { ...ROUTE[0], updatedAt: new Date().toISOString() },
     destination: DESTINATION,
+    fees: 30,
+    courier: { name: 'أحمد محمد', mobile: '01208741247' },
   };
 }
 

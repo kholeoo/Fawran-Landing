@@ -136,6 +136,10 @@
     "error_body": "There's a temporary connection problem. Please try again.",
     "retry": "Try again",
     "home": "Go to homepage",
-    "privacy_note": "This link is for this delivery only and shows no personal information."
+    "privacy_note": "This link is for this delivery only.",
+    "fees_label": "Delivery fee",
+    "fees_value": "{amount} EGP",
+    "courier_label": "Courier",
+    "call": "Call"
   }
 }

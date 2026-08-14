@@ -80,7 +80,7 @@ describe('normalizeTrackingState', () => {
     destination: { latitude: 29.985, longitude: 31.14 },
   };
 
-  it('reads the five-key payload', () => {
+  it('reads a payload that omits fees and courier without failing the page', () => {
     expect(normalizeTrackingState(inTransit)).toEqual({
       status: TRACKING_STATUS.IN_TRANSIT,
       isTrackingActive: true,
@@ -91,6 +91,8 @@ describe('normalizeTrackingState', () => {
         updatedAt: '2026-08-12T10:42:31.000Z',
       },
       destination: { latitude: 29.985, longitude: 31.14 },
+      fees: null,
+      courier: null,
     });
   });
 
@@ -115,6 +117,8 @@ describe('normalizeTrackingState', () => {
       isFinal: false,
       location: null,
       destination: { latitude: 29.985, longitude: 31.14 },
+      fees: null,
+      courier: null,
     });
   });
 
@@ -196,6 +200,43 @@ describe('normalizeTrackingState', () => {
     expect(normalizeTrackingState(null)).toBeNull();
     expect(normalizeTrackingState('nope')).toBeNull();
     expect(normalizeTrackingState([])).toBeNull();
+  });
+
+  it('reads fees and courier when the backend whitelist includes them', () => {
+    expect(
+      normalizeTrackingState({
+        ...inTransit,
+        fees: 30,
+        courier: { name: 'أحمد محمد', mobile: '01208741247' },
+      }),
+    ).toEqual({
+      status: TRACKING_STATUS.IN_TRANSIT,
+      isTrackingActive: true,
+      isFinal: false,
+      location: {
+        latitude: 29.9792,
+        longitude: 31.1342,
+        updatedAt: '2026-08-12T10:42:31.000Z',
+      },
+      destination: { latitude: 29.985, longitude: 31.14 },
+      fees: 30,
+      courier: { name: 'أحمد محمد', mobile: '01208741247' },
+    });
+  });
+
+  it('keeps a zero fee and drops junk fees/courier instead of failing the page', () => {
+    expect(normalizeTrackingState({ ...inTransit, fees: 0 })?.fees).toBe(0);
+    expect(normalizeTrackingState({ ...inTransit, fees: -1 })?.fees).toBeNull();
+    expect(normalizeTrackingState({ ...inTransit, fees: '30' })?.fees).toBeNull();
+    expect(
+      normalizeTrackingState({
+        ...inTransit,
+        courier: { name: 'أحمد', mobile: '   ' },
+      })?.courier,
+    ).toBeNull();
+    expect(
+      normalizeTrackingState({ ...inTransit, courier: { name: 'أحمد' } })?.courier,
+    ).toBeNull();
   });
 });
 
