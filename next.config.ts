@@ -8,6 +8,16 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
 
+  async redirects() {
+    return [
+      { source: '/privacy', destination: '/ar/privacy', permanent: false },
+      { source: '/privacy-policy', destination: '/ar/privacy', permanent: false },
+      { source: '/terms', destination: '/ar/terms', permanent: false },
+      { source: '/support', destination: '/ar/support', permanent: false },
+      { source: '/legal', destination: '/ar/privacy', permanent: false },
+    ];
+  },
+
   async headers() {
     return [
       {

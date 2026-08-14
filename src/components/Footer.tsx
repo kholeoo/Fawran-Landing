@@ -11,11 +11,17 @@ export default function Footer() {
   const locale = useLocale();
   const year = new Date().getFullYear();
 
+  const home = `/${locale}`;
   const links = [
-    { label: tNav('about'), href: '#about' },
-    { label: tNav('features'), href: '#features' },
-    { label: tNav('contact'), href: '#contact' },
-    { label: tNav('download'), href: '#download' },
+    { label: tNav('about'), href: `${home}#about` },
+    { label: tNav('features'), href: `${home}#features` },
+    { label: tNav('contact'), href: `${home}#contact` },
+    { label: tNav('download'), href: `${home}#download` },
+  ];
+  const legalLinks = [
+    { label: tNav('privacy'), href: `${home}/privacy` },
+    { label: tNav('terms'), href: `${home}/terms` },
+    { label: tNav('support'), href: `${home}/support` },
   ];
 
   return (
@@ -41,6 +47,18 @@ export default function Footer() {
             ))}
           </nav>
         </div>
+
+        <nav className="mt-6 flex flex-wrap justify-center md:justify-end gap-6">
+          {legalLinks.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="text-[#9BA5BF] hover:text-[#1B6AFF] text-sm transition-colors"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </nav>
 
         <div className="mt-10 pt-6 border-t border-[#E2E6F0] flex flex-col sm:flex-row items-center justify-between gap-3 text-[#9BA5BF] text-xs">
           <span>{t('made_in')}</span>

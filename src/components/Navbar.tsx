@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import FawranWordmark from './FawranWordmark';
 import { Menu, X } from 'lucide-react';
@@ -11,6 +12,10 @@ export default function Navbar() {
   const t = useTranslations('nav');
   const locale = useLocale();
   const otherLocale = locale === 'ar' ? 'en' : 'ar';
+  const pathname = usePathname() ?? `/${locale}`;
+  const home = `/${locale}`;
+  const otherLocaleHref =
+    pathname.replace(/^\/(ar|en)(?=\/|$)/, `/${otherLocale}`) || `/${otherLocale}`;
 
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -22,9 +27,10 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { key: 'about', label: t('about'), href: '#about' },
-    { key: 'features', label: t('features'), href: '#features' },
-    { key: 'contact', label: t('contact'), href: '#contact' },
+    { key: 'about', label: t('about'), href: `${home}#about` },
+    { key: 'features', label: t('features'), href: `${home}#features` },
+    { key: 'contact', label: t('contact'), href: `${home}#contact` },
+    { key: 'support', label: t('support'), href: `${home}/support` },
   ];
 
   return (
@@ -56,14 +62,14 @@ export default function Navbar() {
 
         <div className="flex items-center gap-3">
           <Link
-            href={`/${otherLocale}`}
+            href={otherLocaleHref}
             className="hidden md:flex text-xs font-semibold px-3 py-1.5 rounded-full border border-[#E2E6F0] text-[#4A5270] hover:border-[#1B6AFF] hover:text-[#1B6AFF] transition-all"
           >
             {locale === 'ar' ? 'EN' : 'AR'}
           </Link>
 
           <a
-            href="#download"
+            href={`${home}#download`}
             className="hidden md:flex items-center px-4 py-2 rounded-full bg-[#1B6AFF] text-white text-sm font-semibold hover:bg-[#1455CC] transition-all glow-blue"
           >
             {t('download')}
@@ -100,13 +106,13 @@ export default function Navbar() {
               ))}
               <div className="flex gap-3 pt-2">
                 <Link
-                  href={`/${otherLocale}`}
+                  href={otherLocaleHref}
                   className="px-4 py-2 rounded-full border border-[#E2E6F0] text-[#4A5270] text-sm"
                 >
                   {locale === 'ar' ? 'English' : 'العربية'}
                 </Link>
                 <a
-                  href="#download"
+                  href={`${home}#download`}
                   onClick={() => setOpen(false)}
                   className="px-4 py-2 rounded-full bg-[#1B6AFF] text-white text-sm font-semibold"
                 >
