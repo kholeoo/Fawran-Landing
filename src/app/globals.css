@@ -32,12 +32,18 @@ body {
   font-family: var(--font-inter), var(--font-cairo), sans-serif;
 }
 
-* {
+/* Only hide the native cursor while <CustomCursor /> is mounted — it toggles
+   this class on <html> itself. Applying `cursor: none` globally instead left
+   every page that doesn't render the component (legal, support, tracking) with
+   no visible pointer at all. */
+.custom-cursor-active,
+.custom-cursor-active * {
   cursor: none;
 }
 
 @media (hover: none) {
-  * {
+  .custom-cursor-active,
+  .custom-cursor-active * {
     cursor: auto;
   }
 }
@@ -57,19 +63,7 @@ body {
   box-shadow: 0 2px 8px rgba(13, 16, 32, 0.06);
 }
 
-/* ── Tracking page ──────────────────────────────────────────────────────────
-   The landing hides the native cursor in favour of <CustomCursor />. The
-   receiver tracking page deliberately does not load that component, so it opts
-   the cursor back in for its own subtree. */
-.tracking-page,
-.tracking-page * {
-  cursor: auto;
-}
-
-.tracking-page a,
-.tracking-page button {
-  cursor: pointer;
-}
+/* ── Tracking page ────────────────────────────────────────────────────────── */
 
 /* Breathing dot on the "live" badge. Deliberately CSS rather than
    framer-motion: this page must not pull a 40kB animation runtime over a mobile

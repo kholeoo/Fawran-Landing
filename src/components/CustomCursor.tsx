@@ -22,6 +22,15 @@ export default function CustomCursor() {
     return () => window.removeEventListener('mousemove', move);
   }, [cursorX, cursorY]);
 
+  // Hiding the native cursor is scoped to this component's lifetime rather than
+  // declared globally, so a page that doesn't render the custom cursor can never
+  // end up with no cursor at all. See `.custom-cursor-active` in globals.css.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add('custom-cursor-active');
+    return () => root.classList.remove('custom-cursor-active');
+  }, []);
+
   return (
     <>
       {/* Hidden on touch devices via CSS; mousemove never fires on mobile so dots stay off-screen */}
