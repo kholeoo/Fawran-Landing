@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import { locales, defaultLocale, type Locale } from '@/i18n';
 import { siteUrl, isIndexable } from '@/lib/site';
+import { alternateNames, sameAs, playStoreUrl } from '@/lib/brand';
 import Analytics from '@/components/Analytics';
 import '../globals.css';
 
@@ -79,6 +80,36 @@ async function buildJsonLd(locale: string) {
   const description = t('description');
   const url = `${siteUrl}/${locale}`;
 
+  // A courier service has no premises to visit, so the area it covers is
+  // described as a service area rather than a street address. Reused by both the
+  // Organization and the DeliveryService node: several unrelated products share
+  // this brand name — a Qatari payment service above all — and the country is
+  // the cheapest signal that tells them apart.
+  //
+  // Deliberately an array of one rather than a bare object: launching a second
+  // city is then an added entry here and its two translated strings, with no
+  // change to the shape consumers read. Only list cities actually served —
+  // claiming national coverage before it exists sends visitors to a city we
+  // cannot deliver in, and the bounce costs more than the extra reach earns.
+  const areaServed = [
+    {
+      '@type': 'City',
+      name: t('city'),
+      containedInPlace: {
+        '@type': 'AdministrativeArea',
+        name: t('region'),
+        // The chain up to Country is what scopes the whole entity to Egypt, so
+        // it keeps working unchanged as cities are added.
+        containedInPlace: { '@type': 'Country', name: t('country') },
+      },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: 29.9668,
+        longitude: 32.5498,
+      },
+    },
+  ];
+
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -86,9 +117,14 @@ async function buildJsonLd(locale: string) {
         '@type': 'Organization',
         '@id': `${siteUrl}/#organization`,
         name,
+        // Both Arabic spellings plus the Latin transliteration, so the entity
+        // matches whichever form someone searches for.
+        alternateName: alternateNames,
         url: siteUrl,
         logo: `${siteUrl}/wordmark-colored.png`,
         description,
+        areaServed,
+        ...(sameAs.length > 0 && { sameAs }),
       },
       {
         // Organization is one entity shared by both locales, so its @id stays
@@ -101,36 +137,30 @@ async function buildJsonLd(locale: string) {
         publisher: { '@id': `${siteUrl}/#organization` },
       },
       {
-        // A courier service has no premises to visit, so it is described as a
-        // service-area business: areaServed rather than a street address.
         '@type': 'DeliveryService',
         '@id': `${url}#service`,
         name,
+        alternateName: alternateNames,
         description,
         url,
         provider: { '@id': `${siteUrl}/#organization` },
-        areaServed: {
-          '@type': 'City',
-          name: t('city'),
-          containedInPlace: {
-            '@type': 'AdministrativeArea',
-            name: t('region'),
-            containedInPlace: { '@type': 'Country', name: t('country') },
-          },
-          geo: {
-            '@type': 'GeoCoordinates',
-            latitude: 29.9668,
-            longitude: 32.5498,
-          },
-        },
+        areaServed,
       },
       {
         '@type': 'MobileApplication',
         '@id': `${url}#app`,
         name,
+        description,
         url,
-        operatingSystem: 'Android',
-        applicationCategory: 'DeliveryApplication',
+        operatingSystem: 'Android, iOS',
+        // schema.org has no delivery-specific category, and an invented value
+        // matches nothing. BusinessApplication is the closest recognised term;
+        // the DeliveryService node above carries the actual category signal.
+        applicationCategory: 'BusinessApplication',
+        inLanguage: locale,
+        publisher: { '@id': `${siteUrl}/#organization` },
+        ...(playStoreUrl && { installUrl: playStoreUrl, downloadUrl: playStoreUrl }),
+        ...(sameAs.length > 0 && { sameAs }),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'EGP' },
       },
     ],

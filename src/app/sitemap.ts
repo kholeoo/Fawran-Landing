@@ -9,7 +9,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     pages.map((page) => ({
       url: `${siteUrl}/${locale}${page}`,
       lastModified: new Date(),
-      changeFrequency: page === '' ? 'monthly' : 'yearly' as const,
+      // No assertion needed: MetadataRoute.Sitemap gives both branches their
+      // contextual literal type.
+      changeFrequency: page === '' ? 'monthly' : 'yearly',
       priority: page === '' ? (locale === defaultLocale ? 1 : 0.8) : 0.5,
       alternates: {
         languages: {

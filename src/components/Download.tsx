@@ -3,6 +3,18 @@
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import FawranWordmark from './FawranWordmark';
+import { playStoreUrl, appStoreUrl } from '@/lib/brand';
+
+// The store listings are the clearest public proof of which "Fawran" this is,
+// so link them for real once the URLs exist. Until then the buttons stay put
+// rather than disappearing — the section's layout is built around two of them —
+// but they carry no href, so they are not announced as links and no crawler
+// follows a placeholder "#" back to this same page.
+function storeLinkProps(href: string | undefined) {
+  return href
+    ? { href, target: '_blank' as const, rel: 'noopener' }
+    : { 'aria-disabled': true as const };
+}
 
 export default function Download() {
   const t = useTranslations('download');
@@ -32,7 +44,8 @@ export default function Download() {
         >
           {/* Google Play */}
           <a
-            href="#"
+            {...storeLinkProps(playStoreUrl)}
+            aria-label={t('google_play')}
             className="flex items-center gap-3 px-6 py-3.5 rounded-2xl bg-white text-[#0D1020] hover:bg-blue-50 transition-all shadow-lg"
           >
             <svg viewBox="0 0 24 24" className="w-8 h-8" fill="currentColor">
@@ -49,7 +62,8 @@ export default function Download() {
 
           {/* App Store */}
           <a
-            href="#"
+            {...storeLinkProps(appStoreUrl)}
+            aria-label={t('app_store')}
             className="flex items-center gap-3 px-6 py-3.5 rounded-2xl bg-white text-[#0D1020] hover:bg-blue-50 transition-all shadow-lg"
           >
             <svg viewBox="0 0 24 24" className="w-8 h-8 text-[#0D1020]" fill="currentColor">
