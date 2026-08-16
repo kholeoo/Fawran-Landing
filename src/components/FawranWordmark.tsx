@@ -19,7 +19,7 @@ export default function FawranWordmark({ variant = 'colored', width = 140, class
   return (
     <Image
       src={src}
-      alt="فورًا Fawran"
+      alt="فوراً Fawran"
       width={width}
       height={height}
       className={className}

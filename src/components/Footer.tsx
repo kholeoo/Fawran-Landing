@@ -64,7 +64,7 @@ export default function Footer() {
 
         <div className="mt-10 pt-6 border-t border-[#E2E6F0] flex flex-col sm:flex-row items-center justify-between gap-3 text-[#9BA5BF] text-xs">
           <span>{t('made_in')}</span>
-          <span>© {year} فورًا · {t('rights')}</span>
+          <span>© {year} فوراً · {t('rights')}</span>
         </div>
       </div>
     </footer>

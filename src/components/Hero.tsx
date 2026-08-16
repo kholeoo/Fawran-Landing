@@ -28,7 +28,7 @@ export default function Hero() {
           transition={{ duration: 0.7 }}
         >
           <span className="inline-block mb-5 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#EEF3FF] border border-[#D4E2FF] text-[#1B6AFF]">
-            فورًا · Fawran
+            فوراً · Fawran
           </span>
         </motion.div>
 

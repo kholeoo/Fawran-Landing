@@ -27,7 +27,7 @@ export default function TrackingHeader() {
   return (
     <header className="shrink-0 border-b border-[#E2E6F0] bg-white">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href={`/${locale}`} className="flex items-center" aria-label="فورًا Fawran">
+        <Link href={`/${locale}`} className="flex items-center" aria-label="فوراً Fawran">
           <FawranWordmark variant="colored" width={104} />
         </Link>
 

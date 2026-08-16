@@ -146,7 +146,7 @@ describe('tracking page — Arabic', () => {
 
     // Copy that only exists on the landing page.
     expect(screen.queryByText(/حمّل التطبيق/)).not.toBeInTheDocument();
-    expect(screen.queryByText('لماذا فورًا؟')).not.toBeInTheDocument();
+    expect(screen.queryByText('لماذا فوراً؟')).not.toBeInTheDocument();
     expect(screen.queryByText('تواصل معنا')).not.toBeInTheDocument();
     expect(screen.queryByRole('contentinfo')).not.toBeInTheDocument();
   });

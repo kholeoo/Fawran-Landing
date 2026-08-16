@@ -21,14 +21,19 @@ export const appStoreUrl = process.env.NEXT_PUBLIC_APP_STORE_URL;
 export const sameAs = profileUrls.filter((url): url is string => Boolean(url));
 
 // Every written form of the name a person might search for, so the entity
-// matches whichever spelling they type. Arabic writes the tanween on the alef
-// two ways (فورًا / فوراً) and often drops it entirely (فورا); each is a
-// distinct string to a search engine.
+// matches whichever spelling they type.
+//
+// The brand is `فوراً` — alef first, then the tanween. The near-identical
+// `فورًا` orders those two marks the other way; it renders almost the same but
+// is a different byte sequence, and it is the ordinary adverb "immediately"
+// rather than the name. Both belong here, because searchers type both, but only
+// `فوراً` may be used as the name itself — see meta.site_name. Never judge these
+// two by eye; compare the bytes.
 export const alternateNames = [
   'Fawran',
-  'فورًا',
-  'فوراً',
-  'فورا',
   'Fawran Delivery',
-  'فورًا للتوصيل',
+  'فوراً',
+  'فوراً للتوصيل',
+  'فورًا',
+  'فورا',
 ];
