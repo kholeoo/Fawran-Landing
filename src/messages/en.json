@@ -68,7 +68,7 @@
     "q3": "How do I order a courier?",
     "a3": "Download the app and create an account with your mobile number, then create an order with the pickup address, delivery address, and package details. The nearest available courier accepts it, and you can follow them on the map until they arrive.",
     "q4": "How much does delivery cost?",
-    "a4": "The delivery fee is calculated from the distance and the order details, and it is shown to you in the app before you confirm — no surprises afterwards.",
+    "a4": "Delivery starts from 30 EGP and is calculated from the distance and the order details. The fee is shown in the app before you confirm — no surprises afterwards.",
     "q5": "How do I track my order?",
     "a5": "Once a courier accepts your order you can see their location on the map in real time, and you get a notification with every status update. You can also send a tracking link to whoever is waiting for the delivery, with no app install needed.",
     "q6": "Can I cancel an order?",
@@ -76,7 +76,9 @@
     "q7": "Is anything prohibited from being sent?",
     "a7": "Yes. Anything unlawful under Egyptian law is prohibited, including narcotics, weapons and ammunition, hazardous or explosive materials, and any goods requiring special permits you do not hold. Where we suspect a violation we stop the order and notify the authorities.",
     "q8": "How do I work as a Fawran courier?",
-    "a8": "If you are 18 or older and have your own transport, get in touch through the contact form on this site. Couriers use in-app points to accept deliveries, purchased through the payment methods available in the app."
+    "a8": "If you are 18 or older and have your own transport, get in touch through the contact form on this site. Couriers use in-app points to accept deliveries, purchased through the payment methods available in the app.",
+    "q9": "When is Fawran available?",
+    "a9": "The app is open 24/7 and you can place an order at any time. Whether it is accepted depends on a courier being available near you at that moment."
   },
   "clients": {
     "title": "Join as a Client",

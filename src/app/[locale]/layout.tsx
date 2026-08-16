@@ -145,6 +145,34 @@ async function buildJsonLd(locale: string) {
         url,
         provider: { '@id': `${siteUrl}/#organization` },
         areaServed,
+        // A floor price rather than a fixed one: the fee is distance-based, so
+        // minPrice is the only honest figure to publish. Keep this in step with
+        // the FAQ answer, which quotes the same number.
+        offers: {
+          '@type': 'Offer',
+          priceSpecification: {
+            '@type': 'PriceSpecification',
+            minPrice: 30,
+            priceCurrency: 'EGP',
+          },
+        },
+        // Ordering is open around the clock. This describes the service's
+        // availability, not a guarantee that a courier is always free — the
+        // tracking page has an EXPIRED state for when none is found in time.
+        hoursAvailable: {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday',
+          ],
+          opens: '00:00',
+          closes: '23:59',
+        },
       },
       {
         '@type': 'MobileApplication',
