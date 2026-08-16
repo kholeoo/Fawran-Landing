@@ -17,7 +17,8 @@
     "download": "Download App",
     "privacy": "Privacy",
     "terms": "Terms",
-    "support": "Support"
+    "support": "Support",
+    "sitemap": "Sitemap"
   },
   "hero": {
     "headline_accent": "Delivery",
@@ -234,5 +235,17 @@
     "support_how_title": "How to reach us",
     "support_how_body": "Use the contact form on this website. Signed-in users can also contact support from the Account screen in the Fawran app when a support number is configured. A public support email will be added here once the company mailbox is in service.",
     "support_cta": "Open the contact form"
+  },
+  "sitemap": {
+    "title": "Sitemap",
+    "meta_title": "Sitemap | Fawran",
+    "meta_description": "Every page and section of the Fawran delivery site in Suez, Egypt, in one place.",
+    "intro": "Every page and section of the site in one place.",
+    "pages": "Pages",
+    "sections": "Homepage sections",
+    "languages": "Languages",
+    "home": "Home",
+    "xml_title": "For search engines",
+    "xml_body": "The XML sitemap for crawlers is available at"
   }
 }

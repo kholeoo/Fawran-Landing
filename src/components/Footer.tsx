@@ -15,6 +15,7 @@ export default function Footer() {
   const links = [
     { label: tNav('about'), href: `${home}#about` },
     { label: tNav('features'), href: `${home}#features` },
+    { label: tNav('faq'), href: `${home}#faq` },
     { label: tNav('contact'), href: `${home}#contact` },
     { label: tNav('download'), href: `${home}#download` },
   ];
@@ -22,6 +23,7 @@ export default function Footer() {
     { label: tNav('privacy'), href: `${home}/privacy` },
     { label: tNav('terms'), href: `${home}/terms` },
     { label: tNav('support'), href: `${home}/support` },
+    { label: tNav('sitemap'), href: `${home}/sitemap` },
   ];
 
   return (
