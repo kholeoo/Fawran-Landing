@@ -3,7 +3,14 @@ import { locales, defaultLocale } from '@/i18n';
 import { siteUrl } from '@/lib/site';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = ['', '/privacy', '/terms', '/support', '/sitemap'];
+  const pages = [
+    '',
+    '/privacy',
+    '/terms',
+    '/support',
+    '/delete-account',
+    '/sitemap',
+  ];
 
   return locales.flatMap((locale) =>
     pages.map((page) => ({

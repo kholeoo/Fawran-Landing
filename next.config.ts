@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
       { source: '/terms', destination: '/ar/terms', permanent: false },
       { source: '/support', destination: '/ar/support', permanent: false },
       { source: '/legal', destination: '/ar/privacy', permanent: false },
+      // Play's Data Safety form takes a single URL, and reviewers paste it
+      // unprefixed. Both spellings land on the Arabic page.
+      { source: '/delete-account', destination: '/ar/delete-account', permanent: false },
+      { source: '/delete_account', destination: '/ar/delete-account', permanent: false },
     ];
   },
 
