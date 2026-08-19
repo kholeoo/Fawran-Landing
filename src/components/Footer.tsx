@@ -59,7 +59,7 @@ export default function Footer() {
         </div>
 
         <nav
-          className={`mt-6 flex flex-wrap justify-center gap-6 ${isRTL ? "md:justify-start" : "md:justify-end"}`}
+          className={`mt-6 flex flex-wrap justify-center gap-6 justify-start`}
         >
           {legalLinks.map((l) => (
             <Link
