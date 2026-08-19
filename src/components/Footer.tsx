@@ -27,19 +27,31 @@ export default function Footer() {
     { label: tNav('sitemap'), href: `${home}/sitemap` },
   ];
 
+  const isRTL = locale === 'ar';
+  const brandAlign = isRTL
+    ? 'items-center md:items-end md:me-auto'
+    : 'items-center md:items-start';
+  const brandTextAlign = isRTL ? 'text-center md:text-end' : 'text-center md:text-start';
+
   return (
     <footer className="border-t border-[#E2E6F0] bg-white py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="text-center md:text-start rtl:md:text-end">
-            <Link href={`/${locale}`}>
-              <FawranWordmark variant="colored" width={110} />
-            </Link>
-            <p className="text-[#9BA5BF] text-sm mt-1">{t('tagline')}</p>
-            <ContactInfo variant="footer" />
+          <div className={`flex flex-col gap-4 ${brandAlign}`}>
+            <div className={`inline-flex flex-col ${brandAlign}`}>
+              <Link href={`/${locale}`} className="inline-block">
+                <FawranWordmark variant="colored" width={110} />
+              </Link>
+              <p className={`text-[#9BA5BF] text-sm mt-1 ${brandTextAlign}`}>
+                {t('tagline')}
+              </p>
+            </div>
+            <ContactInfo variant="footer" align={isRTL ? 'end' : 'start'} />
           </div>
 
-          <nav className="flex flex-wrap justify-center gap-6">
+          <nav
+            className={`flex flex-wrap justify-center gap-6 ${isRTL ? 'md:justify-start' : 'md:justify-end'}`}
+          >
             {links.map((l) => (
               <a
                 key={l.href}
@@ -52,7 +64,9 @@ export default function Footer() {
           </nav>
         </div>
 
-        <nav className="mt-6 flex flex-wrap justify-center md:justify-end gap-6">
+        <nav
+          className={`mt-6 flex flex-wrap justify-center gap-6 ${isRTL ? 'md:justify-start' : 'md:justify-end'}`}
+        >
           {legalLinks.map((l) => (
             <Link
               key={l.href}

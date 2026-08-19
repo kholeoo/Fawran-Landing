@@ -11,6 +11,7 @@ import {
 
 type Props = {
   variant?: 'inline' | 'footer';
+  align?: 'start' | 'end';
 };
 
 function SocialIcon({ name }: { name: (typeof socialLinks)[number]['name'] }) {
@@ -37,7 +38,7 @@ function SocialIcon({ name }: { name: (typeof socialLinks)[number]['name'] }) {
   }
 }
 
-export default function ContactInfo({ variant = 'inline' }: Props) {
+export default function ContactInfo({ variant = 'inline', align = 'start' }: Props) {
   const t = useTranslations('contact');
 
   const linkClass =
@@ -55,11 +56,16 @@ export default function ContactInfo({ variant = 'inline' }: Props) {
   const rowClass =
     'flex flex-wrap items-center gap-x-4 gap-y-2 text-sm';
 
+  const footerJustify =
+    align === 'end'
+      ? 'justify-center md:justify-end'
+      : 'justify-center md:justify-start';
+
   return (
     <address
       className={
         variant === 'footer'
-          ? `not-italic mt-4 ${rowClass} justify-center md:justify-start rtl:md:justify-end`
+          ? `not-italic ${rowClass} ${footerJustify}`
           : `not-italic ${rowClass} justify-center`
       }
     >
