@@ -52,55 +52,48 @@ export default function ContactInfo({ variant = 'inline' }: Props) {
 
   const iconSize = variant === 'footer' ? 'w-[18px] h-[18px]' : 'w-5 h-5';
 
+  const rowClass =
+    'flex flex-wrap items-center gap-x-4 gap-y-2 text-sm';
+
   return (
     <address
       className={
         variant === 'footer'
-          ? 'not-italic mt-4 flex flex-col items-center md:items-start rtl:md:items-end gap-3'
-          : 'not-italic flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center'
+          ? `not-italic mt-4 ${rowClass} justify-center md:justify-start rtl:md:justify-end`
+          : `not-italic ${rowClass} justify-center`
       }
     >
-      <div
-        className={
-          variant === 'footer'
-            ? 'flex flex-col items-center md:items-start rtl:md:items-end gap-2 text-sm'
-            : 'flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm'
-        }
-      >
-        <a href={`tel:${contactPhoneE164}`} className={`inline-flex items-center gap-2 ${linkClass}`}>
-          <Phone size={16} aria-hidden="true" />
-          <span dir="ltr">{contactPhoneDisplay}</span>
-        </a>
-        <a href={`mailto:${contactEmail}`} className={`inline-flex items-center gap-2 ${linkClass}`}>
-          <Mail size={16} aria-hidden="true" />
-          <span dir="ltr">{contactEmail}</span>
-        </a>
-      </div>
+      <a href={`tel:${contactPhoneE164}`} className={`inline-flex items-center gap-2 shrink-0 ${linkClass}`}>
+        <Phone size={16} aria-hidden="true" />
+        <span dir="ltr">{contactPhoneDisplay}</span>
+      </a>
+      <a href={`mailto:${contactEmail}`} className={`inline-flex items-center gap-2 shrink-0 ${linkClass}`}>
+        <Mail size={16} aria-hidden="true" />
+        <span dir="ltr">{contactEmail}</span>
+      </a>
 
-      <div
-        className={
-          variant === 'footer'
-            ? 'flex items-center gap-3'
-            : 'flex flex-col items-center gap-2 sm:items-start'
-        }
-      >
+      {variant === 'inline' ? (
+        <span className="hidden sm:inline text-[#E2E6F0]" aria-hidden="true">
+          |
+        </span>
+      ) : null}
+
+      <div className="flex items-center gap-3 shrink-0">
         {variant === 'inline' ? (
           <span className="text-[#9BA5BF] text-xs font-medium">{t('follow_us')}</span>
         ) : null}
-        <div className="flex items-center gap-3">
-          {socialLinks.map(({ name, href }) => (
-            <a
-              key={name}
-              href={href}
-              target="_blank"
-              rel="me noopener noreferrer"
-              aria-label={name}
-              className={`${iconClass} ${iconSize}`}
-            >
-              <SocialIcon name={name} />
-            </a>
-          ))}
-        </div>
+        {socialLinks.map(({ name, href }) => (
+          <a
+            key={name}
+            href={href}
+            target="_blank"
+            rel="me noopener noreferrer"
+            aria-label={name}
+            className={`${iconClass} ${iconSize}`}
+          >
+            <SocialIcon name={name} />
+          </a>
+        ))}
       </div>
     </address>
   );
