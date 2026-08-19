@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { locales, defaultLocale, type Locale } from '@/i18n';
 import { siteUrl } from '@/lib/site';
+import { contactEmail, contactPhoneDisplay } from '@/lib/contact';
 import LegalPage from '@/components/LegalPage';
 
 type Props = {
@@ -49,7 +50,10 @@ export default async function SupportPage({ params }: Props) {
   return (
     <LegalPage
       title={t('support_title')}
-      intro={t('support_intro')}
+      intro={t('support_intro', {
+        email: contactEmail,
+        phone: contactPhoneDisplay,
+      })}
       sections={[
         { title: tAbout('title'), body: tAbout('body') },
         {
@@ -59,7 +63,13 @@ export default async function SupportPage({ params }: Props) {
             country: tMeta('country'),
           }),
         },
-        { title: t('support_how_title'), body: t('support_how_body') },
+        {
+          title: t('support_how_title'),
+          body: t('support_how_body', {
+            email: contactEmail,
+            phone: contactPhoneDisplay,
+          }),
+        },
       ]}
       cta={{ href: `/${locale}#contact`, label: t('support_cta') }}
     />

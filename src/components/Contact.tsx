@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { trackEvent } from '@/lib/gtag';
+import ContactInfo from '@/components/ContactInfo';
 
 const API_URL = 'https://fawran-backend.onrender.com/api/v1';
 
@@ -129,6 +130,9 @@ export default function Contact() {
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-[#0D1020]">{t('title')}</h2>
           <div className="mt-3 mx-auto w-16 h-1 rounded-full bg-[#1B6AFF]" />
+          <div className="mt-8">
+            <ContactInfo />
+          </div>
         </motion.div>
 
         <motion.div

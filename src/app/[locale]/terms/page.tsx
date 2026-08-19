@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { locales, defaultLocale, type Locale } from '@/i18n';
 import { siteUrl } from '@/lib/site';
+import { contactEmail, contactPhoneDisplay } from '@/lib/contact';
 import LegalPage from '@/components/LegalPage';
 
 type Props = {
@@ -53,10 +54,15 @@ export default async function TermsPage({ params }: Props) {
 
   const t = await getTranslations({ locale, namespace: 'legal' });
   const count = sectionCount(t);
-  const sections = Array.from({ length: count }, (_, i) => ({
-    title: t(`t${i + 1}_title`),
-    body: t(`t${i + 1}_body`),
-  }));
+  const contactVars = { email: contactEmail, phone: contactPhoneDisplay };
+  const sections = Array.from({ length: count }, (_, i) => {
+    const key = `t${i + 1}_body`;
+    const needsContact = key === 't12_body';
+    return {
+      title: t(`t${i + 1}_title`),
+      body: t(key, needsContact ? contactVars : undefined),
+    };
+  });
 
   return (
     <LegalPage

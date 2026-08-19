@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { locales, defaultLocale, type Locale } from '@/i18n';
 import { siteUrl } from '@/lib/site';
+import { contactEmail } from '@/lib/contact';
 import LegalPage from '@/components/LegalPage';
 
 type Props = {
@@ -10,8 +11,6 @@ type Props = {
 };
 
 const ogLocales: Record<Locale, string> = { ar: 'ar_EG', en: 'en_US' };
-
-const SUPPORT_EMAIL = 'company@fawran.co';
 
 /**
  * Sections are `d{n}_title` / `d{n}_body`, matching how privacy uses `s{n}_`
@@ -61,7 +60,7 @@ export default async function DeleteAccountPage({ params }: Props) {
   const count = sectionCount(t);
   const sections = Array.from({ length: count }, (_, i) => ({
     title: t(`d${i + 1}_title`),
-    body: t(`d${i + 1}_body`, { email: SUPPORT_EMAIL }),
+    body: t(`d${i + 1}_body`, { email: contactEmail }),
   }));
 
   return (
@@ -71,12 +70,12 @@ export default async function DeleteAccountPage({ params }: Props) {
       intro={t('delete_intro')}
       sections={sections}
       cta={{
-        href: `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(
+        href: `mailto:${contactEmail}?subject=${encodeURIComponent(
           t('delete_cta_subject'),
         )}`,
         label: t('delete_cta'),
       }}
-      footerNote={t('delete_footer_note', { email: SUPPORT_EMAIL })}
+      footerNote={t('delete_footer_note', { email: contactEmail })}
     />
   );
 }

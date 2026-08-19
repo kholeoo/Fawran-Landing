@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
 import Link from 'next/link';
 import FawranWordmark from './FawranWordmark';
+import ContactInfo from './ContactInfo';
 
 export default function Footer() {
   const t = useTranslations('footer');
@@ -35,6 +36,7 @@ export default function Footer() {
               <FawranWordmark variant="colored" width={110} />
             </Link>
             <p className="text-[#9BA5BF] text-sm mt-1">{t('tagline')}</p>
+            <ContactInfo variant="footer" />
           </div>
 
           <nav className="flex flex-wrap justify-center gap-6">

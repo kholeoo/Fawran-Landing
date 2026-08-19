@@ -5,20 +5,31 @@
 // domain to store listings and social profiles that already carry the right
 // category and country, and consolidates them into one entity.
 //
-// Env-gated like every other integration here: unset values simply drop out, so
-// the JSON-LD never claims a profile that does not exist yet.
-const profileUrls = [
+import {
+  facebookUrl,
+  instagramUrl,
+  linkedinUrl,
+} from '@/lib/contact';
+
+// Store listings and social profiles are kept separate: Organization `sameAs`
+// carries both (entity disambiguation), while MobileApplication `sameAs` is
+// store URLs only — social profiles are not alternate identities of the app.
+const storeProfileUrls = [
   process.env.NEXT_PUBLIC_PLAY_STORE_URL,
   process.env.NEXT_PUBLIC_APP_STORE_URL,
-  process.env.NEXT_PUBLIC_FACEBOOK_URL,
-  process.env.NEXT_PUBLIC_INSTAGRAM_URL,
-  process.env.NEXT_PUBLIC_LINKEDIN_URL,
+].filter((url): url is string => Boolean(url));
+
+const socialProfileUrls = [
+  process.env.NEXT_PUBLIC_FACEBOOK_URL ?? facebookUrl,
+  process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? instagramUrl,
+  process.env.NEXT_PUBLIC_LINKEDIN_URL ?? linkedinUrl,
 ];
 
 export const playStoreUrl = process.env.NEXT_PUBLIC_PLAY_STORE_URL;
 export const appStoreUrl = process.env.NEXT_PUBLIC_APP_STORE_URL;
 
-export const sameAs = profileUrls.filter((url): url is string => Boolean(url));
+export const organizationSameAs = [...storeProfileUrls, ...socialProfileUrls];
+export const applicationSameAs = storeProfileUrls;
 
 // Every written form of the name a person might search for, so the entity
 // matches whichever spelling they type.

@@ -5,7 +5,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import { locales, defaultLocale, type Locale } from '@/i18n';
 import { siteUrl, isIndexable } from '@/lib/site';
-import { alternateNames, sameAs, playStoreUrl } from '@/lib/brand';
+import { alternateNames, organizationSameAs, applicationSameAs, playStoreUrl } from '@/lib/brand';
+import { buildContactPoint, contactEmail, contactPhoneE164 } from '@/lib/contact';
 import Analytics from '@/components/Analytics';
 import '../globals.css';
 
@@ -110,6 +111,8 @@ async function buildJsonLd(locale: string) {
     },
   ];
 
+  const contactPoint = buildContactPoint(t('country'));
+
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -123,8 +126,11 @@ async function buildJsonLd(locale: string) {
         url: siteUrl,
         logo: `${siteUrl}/wordmark-colored.png`,
         description,
+        email: contactEmail,
+        telephone: contactPhoneE164,
         areaServed,
-        ...(sameAs.length > 0 && { sameAs }),
+        contactPoint: [contactPoint],
+        ...(organizationSameAs.length > 0 && { sameAs: organizationSameAs }),
       },
       {
         // Organization is one entity shared by both locales, so its @id stays
@@ -145,6 +151,7 @@ async function buildJsonLd(locale: string) {
         url,
         provider: { '@id': `${siteUrl}/#organization` },
         areaServed,
+        contactPoint: [contactPoint],
         // A floor price rather than a fixed one: the fee is distance-based, so
         // minPrice is the only honest figure to publish. Keep this in step with
         // the FAQ answer, which quotes the same number.
@@ -188,7 +195,7 @@ async function buildJsonLd(locale: string) {
         inLanguage: locale,
         publisher: { '@id': `${siteUrl}/#organization` },
         ...(playStoreUrl && { installUrl: playStoreUrl, downloadUrl: playStoreUrl }),
-        ...(sameAs.length > 0 && { sameAs }),
+        ...(applicationSameAs.length > 0 && { sameAs: applicationSameAs }),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'EGP' },
       },
     ],
