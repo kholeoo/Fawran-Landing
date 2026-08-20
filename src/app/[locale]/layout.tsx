@@ -3,8 +3,8 @@ import { Cairo, Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
-import { locales, defaultLocale, type Locale } from '@/i18n';
-import { siteUrl, isIndexable } from '@/lib/site';
+import { locales, type Locale } from '@/i18n';
+import { siteUrl, isIndexable, languageAlternates, localizedUrl } from '@/lib/site';
 import { alternateNames, organizationSameAs, applicationSameAs, playStoreUrl } from '@/lib/brand';
 import { buildContactPoint, contactEmail, contactPhoneE164 } from '@/lib/contact';
 import Analytics from '@/components/Analytics';
@@ -26,11 +26,6 @@ const inter = Inter({
 
 const ogLocales: Record<Locale, string> = { ar: 'ar_EG', en: 'en_US' };
 
-const languageAlternates = {
-  ...Object.fromEntries(locales.map((locale) => [locale, `${siteUrl}/${locale}`])),
-  'x-default': `${siteUrl}/${defaultLocale}`,
-};
-
 type Props = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
@@ -42,13 +37,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = t('title');
   const description = t('description');
-  const url = `${siteUrl}/${locale}`;
+  const url = localizedUrl(locale);
 
   return {
     metadataBase: new URL(siteUrl),
     title,
     description,
-    alternates: { canonical: url, languages: languageAlternates },
+    alternates: { canonical: url, languages: languageAlternates() },
     openGraph: {
       title,
       description,
@@ -57,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale: ogLocales[locale as Locale],
       type: 'website',
     },
-    twitter: { card: 'summary_large_image', title, description },
+    twitter: { card: 'summary_large_image' },
     robots: isIndexable
       ? { index: true, follow: true }
       : { index: false, follow: false },
@@ -79,7 +74,7 @@ async function buildJsonLd(locale: string) {
 
   const name = t('site_name');
   const description = t('description');
-  const url = `${siteUrl}/${locale}`;
+  const url = localizedUrl(locale);
 
   // A courier service has no premises to visit, so the area it covers is
   // described as a service area rather than a street address. Reused by both the

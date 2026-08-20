@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { locales, defaultLocale, type Locale } from '@/i18n';
-import { siteUrl } from '@/lib/site';
+import { locales, type Locale } from '@/i18n';
+import { languageAlternates, localizedUrl } from '@/lib/site';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -27,18 +27,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'sitemap' });
   const title = t('meta_title');
   const description = t('meta_description');
-  const url = `${siteUrl}/${locale}/sitemap`;
+  const url = localizedUrl(locale, '/sitemap');
 
   return {
     title,
     description,
     alternates: {
       canonical: url,
-      languages: {
-        ar: `${siteUrl}/ar/sitemap`,
-        en: `${siteUrl}/en/sitemap`,
-        'x-default': `${siteUrl}/${defaultLocale}/sitemap`,
-      },
+      languages: languageAlternates('/sitemap'),
     },
     openGraph: {
       title,

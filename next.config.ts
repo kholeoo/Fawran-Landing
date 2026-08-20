@@ -10,15 +10,15 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
-      { source: '/privacy', destination: '/ar/privacy', permanent: false },
-      { source: '/privacy-policy', destination: '/ar/privacy', permanent: false },
-      { source: '/terms', destination: '/ar/terms', permanent: false },
-      { source: '/support', destination: '/ar/support', permanent: false },
-      { source: '/legal', destination: '/ar/privacy', permanent: false },
+      { source: '/privacy', destination: '/ar/privacy', permanent: true },
+      { source: '/privacy-policy', destination: '/ar/privacy', permanent: true },
+      { source: '/terms', destination: '/ar/terms', permanent: true },
+      { source: '/support', destination: '/ar/support', permanent: true },
+      { source: '/legal', destination: '/ar/privacy', permanent: true },
       // Play's Data Safety form takes a single URL, and reviewers paste it
       // unprefixed. Both spellings land on the Arabic page.
-      { source: '/delete-account', destination: '/ar/delete-account', permanent: false },
-      { source: '/delete_account', destination: '/ar/delete-account', permanent: false },
+      { source: '/delete-account', destination: '/ar/delete-account', permanent: true },
+      { source: '/delete_account', destination: '/ar/delete-account', permanent: true },
     ];
   },
 

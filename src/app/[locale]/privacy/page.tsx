@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { locales, defaultLocale, type Locale } from '@/i18n';
-import { siteUrl } from '@/lib/site';
+import { locales, type Locale } from '@/i18n';
+import { languageAlternates, localizedUrl } from '@/lib/site';
 import { contactEmail, contactPhoneDisplay } from '@/lib/contact';
 import LegalPage from '@/components/LegalPage';
 
@@ -26,17 +26,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'legal' });
   const title = t('privacy_meta_title');
   const description = t('privacy_meta_description');
-  const url = `${siteUrl}/${locale}/privacy`;
-  const languages = {
-    ar: `${siteUrl}/ar/privacy`,
-    en: `${siteUrl}/en/privacy`,
-    'x-default': `${siteUrl}/${defaultLocale}/privacy`,
-  };
+  const url = localizedUrl(locale, '/privacy');
 
   return {
     title,
     description,
-    alternates: { canonical: url, languages },
+    alternates: { canonical: url, languages: languageAlternates('/privacy') },
     openGraph: {
       title,
       description,
